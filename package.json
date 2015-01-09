@@ -1,0 +1,20 @@
+{
+  "name": "reactTodo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "todo.js",
+  "scripts": {
+    "start": "watchify -d -t reactify todo.jsx -o todo.js -v",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^8.1.0",
+    "flux": "^2.0.1",
+    "lodash": "^2.4.1",
+    "react": "^0.12.2",
+    "reactify": "^0.17.1",
+    "watchify": "^2.2.1"
+  }
+}
