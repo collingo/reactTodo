@@ -66,7 +66,6 @@ var TodoApp = React.createClass({
 
 var TodoList = React.createClass({
   render: function () {
-    console.log(this.props);
     var children = (this.props.node.children || []).map(function (todo) {
       return (
         <Todo 
@@ -96,7 +95,6 @@ var Todo = React.createClass({
   },
   handleClick: function (e) {
     e.preventDefault();
-    console.log('clicked', this.props.todo.id);
     this.props.onClick(this.props.todo.id);
   }
 });
