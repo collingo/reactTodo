@@ -1,7 +1,14 @@
 window.React = require('react');
 var Dispatcher = require('flux').Dispatcher;
 var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
+var R = require('ramda');
+
+// patching in 'call' as it seemed to be missing
+// from 0.8.0 even though it is documented
+// http://ramdajs.com/docs/R.html#call
+R.call = function call(fn) {
+    return fn.apply(this, _slice(arguments, 1));
+};
 
 var data = [{
   id: 0,
@@ -31,16 +38,29 @@ var data = [{
   text: 'Grain'
 }];
 
-var getData = function (nodeId) {
-  return (function (x) {
-    x.children = x.children.map(function (todoId) {
-      return data[todoId];
-    });
-    return x;
-  })(_.clone(_.find(data, function (node) {
-      return node.id === nodeId;
-  })));
-};
+var getData = R.pipe(
+  R.pipe(
+    R.flip(R.call),
+    R.flip(R.map)([
+      R.pipe(
+        R.propEq('id'),
+        R.flip(R.find)(data),
+        R.prop('children'),
+        R.map(
+          R.pipe(
+            R.propEq('id'),
+            R.flip(R.find)(data)
+          )
+        )
+      ),
+      R.pipe(
+        R.propEq('id'),
+        R.flip(R.find)(data)
+      )
+    ])
+  ),
+  R.apply(R.assoc('children'))
+);
 
 var TodoApp = React.createClass({
   getInitialState: function () {
